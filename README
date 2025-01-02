@@ -2,5 +2,5 @@ This is a shameless copy - pythonization of a program written by https://github.
 I converted this to python to incorporate in to a bigger project.
 Also made a fontmaker for this which can generate fonts using a tkinter interface. These fonts can be directly added at the top of this script.
 Font maker is here https://github.com/sxkod/fontmaker
-Currently able to make 8x8 fonts and icons work well
-Still trying to figure out how to make bigger fonts.
+Currently 8x8 fonts, 16x16 fonts and icons work well
+
