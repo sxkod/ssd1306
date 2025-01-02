@@ -72,7 +72,7 @@ ftst4={'L': [8188, 65535, 65535, 57344, 57344, 57344, 57344, 57344, 57344, 57344
 ftst5={'O': [0, 32766, 32766, 24582, 24582, 24582, 24582, 24582, 24582, 24582, 24582, 24582, 24582, 32766, 32766, 0], 'M': [0, 16382, 16382, 6, 6, 6, 6, 16382, 16382, 6, 6, 6, 6, 16382, 16382, 0], 'L': [0, 32766, 32766, 24576, 24576, 24576, 24576, 24576, 24576, 24576, 24576, 24576, 24576, 24576, 0, 0], 'A': [0, 32766, 32766, 774, 774, 774, 774, 966, 966, 774, 774, 774, 774, 32766, 32766, 0], 'P': [0, 32766, 32766, 198, 198, 198, 198, 198, 198, 254, 254, 254, 0, 0, 0, 0]}
 #choose one to use , may be it should be an option
 curfont=ftst5
-curmsg="MOLL"
+curmsg="MOLL\nPOLL\nMOM"
 
 def ssd1306_oled_onoff(onoff):
 	if onoff == 0:
@@ -266,11 +266,15 @@ def ssd1306_oled_default_config(oled_lines, oled_columns):
 
 
 
-def ssd1306_oled_write_line(lsize, lstx):
+def ssd1306_oled_write_line(lsize, lstx,top=True):
 	data_buf=[]
 	for n in lstx:
 		for m in curfont[n]:
-			data_buf.append(m)
+			if top:
+				data_buf.append(m & 0xff)
+			else:
+				data_buf.append(m >> 8)
+		
 	write_dbuf(data_buf)
 
 def write_dbuf(data_buf):
@@ -280,6 +284,21 @@ def write_dbuf(data_buf):
 		data_buf[i:i+32]
 		i+=32
 
+
+def ssd1306_oled_write_string_tall(lsize, lstx):
+	global global_x,global_y
+	global max_lines,max_columns
+
+	for n in lstx.split("\n"):
+		ssd1306_oled_set_XY(global_x, global_y)
+		ssd1306_oled_write_line(lsize, n.strip())
+		if global_y+1 < max_lines/8:
+			ssd1306_oled_set_XY(global_x,global_y+1)
+			ssd1306_oled_write_line(lsize,n.strip(),top=False)
+		global_x = 0
+		global_y+=2
+		if global_y >= max_lines / 8:
+			global_y = 0
 
 
 def ssd1306_oled_write_string(lsize, lstx):
@@ -333,4 +352,4 @@ ssd1306_oled_clear_screen()
 ssd1306_oled_set_rotate(0)
 ssd1306_oled_onoff(1)
 ssd1306_oled_set_XY(2,2)
-ssd1306_oled_write_string(0,curmsg)
+ssd1306_oled_write_string_tall(0,curmsg)
