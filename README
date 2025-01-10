@@ -4,3 +4,7 @@ Also made a fontmaker for this which can generate fonts using a tkinter interfac
 Font maker is here https://github.com/sxkod/fontmaker
 Currently 8x8 fonts, 16x16 fonts and icons work well
 
+SSD1306.py is for Raspberry Pi
+xoled.py is for Micropython
+
+I will be making some fonts and putting them here soon.
